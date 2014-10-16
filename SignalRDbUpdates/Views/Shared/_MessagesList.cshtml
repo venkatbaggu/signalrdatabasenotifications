@@ -10,6 +10,9 @@
             @Html.DisplayNameFor(model => model.Message)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.EmptyMessage)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.MessageDate)
         </th>
         
@@ -23,6 +26,9 @@
         <td>
             @Html.DisplayFor(modelItem => item.Message)
         </td>
+        <th>
+            @Html.DisplayFor(modelItem => item.EmptyMessage)
+        </th>
         <td>
             @Html.DisplayFor(modelItem => item.MessageDate)
         </td>

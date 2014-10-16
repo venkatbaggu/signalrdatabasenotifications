@@ -11,6 +11,8 @@ namespace SignalRDbUpdates.Models
 
         public string Message { get; set; }
 
+        public string EmptyMessage { get; set; }
+
         public DateTime MessageDate { get; set; }
     }
 }

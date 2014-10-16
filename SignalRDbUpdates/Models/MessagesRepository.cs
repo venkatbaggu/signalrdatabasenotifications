@@ -11,19 +11,19 @@ namespace SignalRDbUpdates.Models
 {
     public class MessagesRepository
     {
-        string connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        readonly string _connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         public IEnumerable<Messages> GetAllMessages()
         {
-            List<Messages> messages = new List<Messages>();
-            using (var connection = new SqlConnection(connString))
+            var messages = new List<Messages>();
+            using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand(@"SELECT [MessageID], [Message], [Date] FROM [dbo].[Messages]", connection))
+                using (var command = new SqlCommand(@"SELECT [MessageID], [Message], [EmptyMessage], [Date] FROM [dbo].[Messages]", connection))
                 {
                     command.Notification = null;
 
-                    SqlDependency dependency = new SqlDependency(command);
+                    var dependency = new SqlDependency(command);
                     dependency.OnChange += new OnChangeEventHandler(dependency_OnChange);
 
                     if (connection.State == ConnectionState.Closed)
@@ -33,7 +33,7 @@ namespace SignalRDbUpdates.Models
 
                     while (reader.Read())
                     {
-                        messages.Add(new Messages { MessageID = (int)reader["MessageID"], Message = (string)reader["Message"], MessageDate = Convert.ToDateTime(reader["Date"]) });
+                        messages.Add(item: new Messages { MessageID = (int)reader["MessageID"], Message = (string)reader["Message"], EmptyMessage =  reader["EmptyMessage"] != DBNull.Value ? (string) reader["EmptyMessage"] : "", MessageDate = Convert.ToDateTime(reader["Date"]) });
                     }
                 }
               
